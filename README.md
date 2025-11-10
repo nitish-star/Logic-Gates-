@@ -2,6 +2,10 @@
 
 An interactive web application for learning and experimenting with digital logic gates. This project provides a visual and hands-on approach to understanding basic logic gate operations.
 
+## Preview
+
+Try the simulator online: [Live Preview](https://nitish-star.github.io/Logic-Gates-/V2/logic_gates2.0.html)
+
 ## Features
 
 - **Interactive Logic Gates:**
