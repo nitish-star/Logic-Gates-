@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Logic Gates Learning Application</title>
+        <link rel="stylesheet" href="style.css">
+
+    </head>
+<body>
+    <div class="menu-btn" onclick="toggleMenu()">
+        <div class="menu-icon">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+
+    <nav class="nav-bar">
+        <div class="nav-links">
+            <a href="#and">AND</a>
+            <a href="#or">OR</a>
+            <a href="#not">NOT</a>
+            <a href="#nand">NAND</a>
+            <a href="#nor">NOR</a>
+            <a href="#xor">XOR</a>
+            <a href="#xnor">XNOR</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>🔌 Interactive Logic Gates</h1>
+            <div class="legend">
+                <div class="legend-item">
+                    <span>🟢</span>
+                    <span>GREEN = 1 (True)</span>
+                </div>
+                <div class="legend-item">
+                    <span>🔴</span>
+                    <span>RED = 0 (False)</span>
+                </div>
+            </div>
+            <div class="instructions">
+                Click input boxes to toggle between 1 (green) and 0 (red). Watch the output change in real-time!
+            </div>
+        </div>
+
+        <!-- AND Gate -->
+        <div class="gate-section" id="and">
+            <div class="gate-header">
+                <h2>AND Gate</h2>
+            </div>
+            <div class="gate-visual">
+                <div class="inputs-container">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input A:</span>
+                        <div class="input-box high" data-gate="and" data-input="a">1</div>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-label">Input B:</span>
+                        <div class="input-box high" data-gate="and" data-input="b">1</div>
+                    </div>
+                </div>
+                <div class="gate-symbol">
+                    <svg class="gate-svg" viewBox="0 0 180 120">
+                        <!-- Input lines -->
+                        <line x1="10" y1="35" x2="40" y2="35" stroke="#333" stroke-width="3"/>
+                        <line x1="10" y1="85" x2="40" y2="85" stroke="#333" stroke-width="3"/>
+                        <!-- Gate body -->
+                        <path d="M 40 20 L 90 20 Q 130 20 130 60 Q 130 100 90 100 L 40 100 Z" 
+                              fill="none" stroke="#333" stroke-width="3"/>
+                        <!-- Output line -->
+                        <line x1="130" y1="60" x2="170" y2="60" stroke="#333" stroke-width="3"/>
+                    </svg>
+                </div>
+                <div class="output-container">
+                    <span class="output-label">Output:</span>
+                    <div class="output-box high" data-gate="and">1</div>
+                </div>
+            </div>
+            <button class="description-toggle" onclick="toggleDescription('and')">
+                📖 Gate Description
+            </button>
+            <div class="description-content" id="and-desc">
+                <p>The AND gate outputs true (1) only when all inputs are true. It performs logical conjunction, meaning both conditions must be satisfied for the output to be high.</p>
+            </div>
+            <button class="truth-table-toggle" onclick="toggleTruthTable('and')">
+                📊 View Truth Table
+            </button>
+            <div class="truth-table" id="and-table">
+                <table>
+                    <tr><th>A</th><th>B</th><th>Output</th></tr>
+                    <tr><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>1</td><td>0</td></tr>
+                    <tr><td>1</td><td>0</td><td>0</td></tr>
+                    <tr><td>1</td><td>1</td><td>1</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- OR Gate -->
+        <div class="gate-section" id="or">
+            <div class="gate-header">
+                <h2>OR Gate</h2>
+            </div>
+            <div class="gate-visual">
+                <div class="inputs-container">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input A:</span>
+                        <div class="input-box high" data-gate="or" data-input="a">1</div>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-label">Input B:</span>
+                        <div class="input-box high" data-gate="or" data-input="b">1</div>
+                    </div>
+                </div>
+                <div class="gate-symbol">
+                    <svg class="gate-svg" viewBox="0 0 180 120">
+                        <!-- Input lines -->
+                        <line x1="10" y1="35" x2="35" y2="35" stroke="#333" stroke-width="3"/>
+                        <line x1="10" y1="85" x2="35" y2="85" stroke="#333" stroke-width="3"/>
+                        <!-- Gate body -->
+                        <path d="M 30 20 Q 50 20 60 60 Q 50 100 30 100" 
+                              fill="none" stroke="#333" stroke-width="3"/>
+                        <path d="M 60 20 Q 110 30 130 60 Q 110 90 60 100" 
+                              fill="none" stroke="#333" stroke-width="3"/>
+                        <!-- Output line -->
+                        <line x1="130" y1="60" x2="170" y2="60" stroke="#333" stroke-width="3"/>
+                    </svg>
+                </div>
+                <div class="output-container">
+                    <span class="output-label">Output:</span>
+                    <div class="output-box high" data-gate="or">1</div>
+                </div>
+            </div>
+            <button class="description-toggle" onclick="toggleDescription('or')">
+                📖 Gate Description
+            </button>
+            <div class="description-content" id="or-desc">
+                <p>The OR gate outputs true (1) when at least one input is true. It performs logical disjunction, meaning any single condition being satisfied is sufficient for a high output.</p>
+            </div>
+            <button class="truth-table-toggle" onclick="toggleTruthTable('or')">
+                📊 View Truth Table
+            </button>
+            <div class="truth-table" id="or-table">
+                <table>
+                    <tr><th>A</th><th>B</th><th>Output</th></tr>
+                    <tr><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>1</td><td>1</td></tr>
+                    <tr><td>1</td><td>0</td><td>1</td></tr>
+                    <tr><td>1</td><td>1</td><td>1</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- NOT Gate -->
+        <div class="gate-section" id="not">
+            <div class="gate-header">
+                <h2>NOT Gate (Buffer)</h2>
+            </div>
+            <div class="gate-visual">
+                <div class="inputs-container">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input:</span>
+                        <div class="input-box high" data-gate="not" data-input="a">1</div>
+                    </div>
+                </div>
+                <div class="gate-symbol">
+                    <svg class="gate-svg" viewBox="0 0 180 120">
+                        <!-- Input line -->
+                        <line x1="10" y1="60" x2="50" y2="60" stroke="#333" stroke-width="3"/>
+                        <!-- Gate body (triangle) -->
+                        <path d="M 50 30 L 110 60 L 50 90 Z" 
+                              fill="none" stroke="#333" stroke-width="3"/>
+                        <!-- Inversion circle -->
+                        <circle cx="118" cy="60" r="8" fill="none" stroke="#333" stroke-width="3"/>
+                        <!-- Output line -->
+                        <line x1="126" y1="60" x2="170" y2="60" stroke="#333" stroke-width="3"/>
+                    </svg>
+                </div>
+                <div class="output-container">
+                    <span class="output-label">Output:</span>
+                    <div class="output-box low" data-gate="not">0</div>
+                </div>
+            </div>
+            <button class="description-toggle" onclick="toggleDescription('not')">
+                📖 Gate Description
+            </button>
+            <div class="description-content" id="not-desc">
+                <p>The NOT gate, also called an inverter, outputs the opposite of its input. If the input is true (1), the output is false (0), and vice versa.</p>
+            </div>
+            <button class="truth-table-toggle" onclick="toggleTruthTable('not')">
+                📊 View Truth Table
+            </button>
+            <div class="truth-table" id="not-table">
+                <table>
+                    <tr><th>Input</th><th>Output</th></tr>
+                    <tr><td>0</td><td>1</td></tr>
+                    <tr><td>1</td><td>0</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- NAND Gate -->
+        <div class="gate-section" id="nand">
+            <div class="gate-header">
+                <h2>NAND Gate</h2>
+            </div>
+            <div class="gate-visual">
+                <div class="inputs-container">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input A:</span>
+                        <div class="input-box high" data-gate="nand" data-input="a">1</div>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-label">Input B:</span>
+                        <div class="input-box high" data-gate="nand" data-input="b">1</div>
+                    </div>
+                </div>
+                <div class="gate-symbol">
+                    <svg class="gate-svg" viewBox="0 0 180 120">
+                        <!-- Input lines -->
+                        <line x1="10" y1="35" x2="40" y2="35" stroke="#333" stroke-width="3"/>
+                        <line x1="10" y1="85" x2="40" y2="85" stroke="#333" stroke-width="3"/>
+                        <!-- Gate body -->
+                        <path d="M 40 20 L 90 20 Q 122 20 122 60 Q 122 100 90 100 L 40 100 Z" 
+                              fill="none" stroke="#333" stroke-width="3"/>
+                        <!-- Inversion circle -->
+                        <circle cx="130" cy="60" r="8" fill="none" stroke="#333" stroke-width="3"/>
+                        <!-- Output line -->
+                        <line x1="138" y1="60" x2="170" y2="60" stroke="#333" stroke-width="3"/>
+                    </svg>
+                </div>
+                <div class="output-container">
+                    <span class="output-label">Output:</span>
+                    <div class="output-box low" data-gate="nand">0</div>
+                </div>
+            </div>
+            <button class="description-toggle" onclick="toggleDescription('nand')">
+                📖 Gate Description
+            </button>
+            <div class="description-content" id="nand-desc">
+                <p>The NAND gate is a combination of AND and NOT gates. It outputs false (0) only when all inputs are true, essentially negating the AND operation.</p>
+            </div>
+            <button class="truth-table-toggle" onclick="toggleTruthTable('nand')">
+                📊 View Truth Table
+            </button>
+            <div class="truth-table" id="nand-table">
+                <table>
+                    <tr><th>A</th><th>B</th><th>Output</th></tr>
+                    <tr><td>0</td><td>0</td><td>1</td></tr>
+                    <tr><td>0</td><td>1</td><td>1</td></tr>
+                    <tr><td>1</td><td>0</td><td>1</td></tr>
+                    <tr><td>1</td><td>1</td><td>0</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- NOR Gate -->
+        <div class="gate-section" id="nor">
+            <div class="gate-header">
+                <h2>NOR Gate</h2>
+            </div>
+            <div class="gate-visual">
+                <div class="inputs-container">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input A:</span>
+                        <div class="input-box high" data-gate="nor" data-input="a">1</div>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-label">Input B:</span>
+                        <div class="input-box high" data-gate="nor" data-input="b">1</div>
+                    </div>
+                </div>
+                <div class="gate-symbol">
+                    <svg class="gate-svg" viewBox="0 0 180 120">
+                        <!-- Input lines -->
+                        <line x1="10" y1="35" x2="35" y2="35" stroke="#333" stroke-width="3"/>
+                        <line x1="10" y1="85" x2="35" y2="85" stroke="#333" stroke-width="3"/>
+                        <!-- Gate body -->
+                        <path d="M 30 20 Q 50 20 60 60 Q 50 100 30 100" 
+                              fill="none" stroke="#333" stroke-width="3"/>
+                        <path d="M 60 20 Q 105 30 122 60 Q 105 90 60 100" 
+                              fill="none" stroke="#333" stroke-width="3"/>
+                        <!-- Inversion circle -->
+                        <circle cx="130" cy="60" r="8" fill="none" stroke="#333" stroke-width="3"/>
+                        <!-- Output line -->
+                        <line x1="138" y1="60" x2="170" y2="60" stroke="#333" stroke-width="3"/>
+                    </svg>
+                </div>
+                <div class="output-container">
+                    <span class="output-label">Output:</span>
+                    <div class="output-box low" data-gate="nor">0</div>
+                </div>
+            </div>
+            <button class="description-toggle" onclick="toggleDescription('nor')">
+                📖 Gate Description
+            </button>
+            <div class="description-content" id="nor-desc">
+                <p>The NOR gate combines OR and NOT operations. It outputs true (1) only when all inputs are false, essentially negating the OR operation.</p>
+            </div>
+            <button class="truth-table-toggle" onclick="toggleTruthTable('nor')">
+                📊 View Truth Table
+            </button>
+            <div class="truth-table" id="nor-table">
+                <table>
+                    <tr><th>A</th><th>B</th><th>Output</th></tr>
+                    <tr><td>0</td><td>0</td><td>1</td></tr>
+                    <tr><td>0</td><td>1</td><td>0</td></tr>
+                    <tr><td>1</td><td>0</td><td>0</td></tr>
+                    <tr><td>1</td><td>1</td><td>0</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- XOR Gate -->
+        <div class="gate-section" id="xor">
+            <div class="gate-header">
+                <h2>XOR Gate</h2>
+            </div>
+            <div class="gate-visual">
+                <div class="inputs-container">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input A:</span>
+                        <div class="input-box high" data-gate="xor" data-input="a">1</div>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-label">Input B:</span>
+                        <div class="input-box high" data-gate="xor" data-input="b">1</div>
+                    </div>
+                </div>
+                <div class="gate-symbol">
+                    <svg class="gate-svg" viewBox="0 0 180 120">
+                        <!-- Input lines -->
+                        <line x1="10" y1="35" x2="40" y2="35" stroke="#333" stroke-width="3"/>
+                        <line x1="10" y1="85" x2="40" y2="85" stroke="#333" stroke-width="3"/>
+                        <!-- Back arc -->
+                        <path d="M 25 20 Q 40 20 48 60 Q 40 100 25 100" 
+                              fill="none" stroke="#333" stroke-width="2.5"/>
+                        <!-- Gate body -->
+                        <path d="M 35 20 Q 55 20 65 60 Q 55 100 35 100" 
+                              fill="none" stroke="#333" stroke-width="3"/>
+                        <path d="M 65 20 Q 110 30 130 60 Q 110 90 65 100" 
+                              fill="none" stroke="#333" stroke-width="3"/>
+                        <!-- Output line -->
+                        <line x1="130" y1="60" x2="170" y2="60" stroke="#333" stroke-width="3"/>
+                    </svg>
+                </div>
+                <div class="output-container">
+                    <span class="output-label">Output:</span>
+                    <div class="output-box low" data-gate="xor">0</div>
+                </div>
+            </div>
+            <button class="description-toggle" onclick="toggleDescription('xor')">
+                📖 Gate Description
+            </button>
+            <div class="description-content" id="xor-desc">
+                <p>The XOR (exclusive OR) gate outputs true (1) when inputs are different. It returns false when both inputs are the same, making it useful for detecting differences.</p>
+            </div>
+            <button class="truth-table-toggle" onclick="toggleTruthTable('xor')">
+                📊 View Truth Table
+            </button>
+            <div class="truth-table" id="xor-table">
+                <table>
+                    <tr><th>A</th><th>B</th><th>Output</th></tr>
+                    <tr><td>0</td><td>0</td><td>0</td></tr>
+                    <tr><td>0</td><td>1</td><td>1</td></tr>
+                    <tr><td>1</td><td>0</td><td>1</td></tr>
+                    <tr><td>1</td><td>1</td><td>0</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- XNOR Gate -->
+        <div class="gate-section" id="xnor">
+            <div class="gate-header">
+                <h2>XNOR Gate</h2>
+            </div>
+            <div class="gate-visual">
+                <div class="inputs-container">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input A:</span>
+                        <div class="input-box high" data-gate="xnor" data-input="a">1</div>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-label">Input B:</span>
+                        <div class="input-box high" data-gate="xnor" data-input="b">1</div>
+                    </div>
+                </div>
+                <div class="gate-symbol">
+                    <svg class="gate-svg" viewBox="0 0 180 120">
+                        <!-- Input lines -->
+                        <line x1="10" y1="35" x2="40" y2="35" stroke="#333" stroke-width="3"/>
+                        <line x1="10" y1="85" x2="40" y2="85" stroke="#333" stroke-width="3"/>
+                        <!-- Back arc -->
+                        <path d="M 25 20 Q 40 20 48 60 Q 40 100 25 100" 
+                              fill="none" stroke="#333" stroke-width="2.5"/>
+                        <!-- Gate body -->
+                        <path d="M 35 20 Q 55 20 65 60 Q 55 100 35 100" 
+                              fill="none" stroke="#333" stroke-width="3"/>
+                        <path d="M 65 20 Q 105 30 122 60 Q 105 90 65 100" 
+                              fill="none" stroke="#333" stroke-width="3"/>
+                        <!-- Inversion circle -->
+                        <circle cx="130" cy="60" r="8" fill="none" stroke="#333" stroke-width="3"/>
+                        <!-- Output line -->
+                        <line x1="138" y1="60" x2="170" y2="60" stroke="#333" stroke-width="3"/>
+                    </svg>
+                </div>
+                <div class="output-container">
+                    <span class="output-label">Output:</span>
+                    <div class="output-box high" data-gate="xnor">1</div>
+                </div>
+            </div>
+            <button class="description-toggle" onclick="toggleDescription('xnor')">
+                📖 Gate Description
+            </button>
+            <div class="description-content" id="xnor-desc">
+                <p>The XNOR (exclusive NOR) gate outputs true (1) when inputs are the same. It's the negation of XOR, making it useful as an equality detector in digital circuits.</p>
+            </div>
+            <button class="truth-table-toggle" onclick="toggleTruthTable('xnor')">
+                📊 View Truth Table
+            </button>
+            <div class="truth-table" id="xnor-table">
+                <table>
+                    <tr><th>A</th><th>B</th><th>Output</th></tr>
+                    <tr><td>0</td><td>0</td><td>1</td></tr>
+                    <tr><td>0</td><td>1</td><td>0</td></tr>
+                    <tr><td>1</td><td>0</td><td>0</td></tr>
+                    <tr><td>1</td><td>1</td><td>1</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gate logic implementations
+        const gateLogic = {
+            and: (a, b) => a && b,
+            or: (a, b) => a || b,
+            not: (a) => !a,
+            nand: (a, b) => !(a && b),
+            nor: (a, b) => !(a || b),
+            xor: (a, b) => a !== b,
+            xnor: (a, b) => a === b
+        };
+
+        // Initialize all input boxes with click handlers
+        document.querySelectorAll('.input-box').forEach(box => {
+            box.addEventListener('click', function() {
+                // Toggle the state
+                const isHigh = this.classList.contains('high');
+                this.classList.toggle('high');
+                this.classList.toggle('low');
+                this.textContent = isHigh ? '0' : '1';
+                
+                // Update the output for this gate
+                const gate = this.dataset.gate;
+                updateGateOutput(gate);
+            });
+        });
+
+        function updateGateOutput(gateName) {
+            const inputs = document.querySelectorAll(`[data-gate="${gateName}"][data-input]`);
+            const output = document.querySelector(`.output-box[data-gate="${gateName}"]`);
+            
+            if (!output) return;
+            
+            let result;
+            
+            if (gateName === 'not') {
+                const a = inputs[0].classList.contains('high');
+                result = gateLogic.not(a);
+            } else {
+                const a = inputs[0].classList.contains('high');
+                const b = inputs[1].classList.contains('high');
+                result = gateLogic[gateName](a, b);
+            }
+            
+            // Update output box
+            if (result) {
+                output.classList.remove('low');
+                output.classList.add('high');
+                output.textContent = '1';
+            } else {
+                output.classList.remove('high');
+                output.classList.add('low');
+                output.textContent = '0';
+            }
+        }
+
+        function toggleDescription(gate) {
+            const desc = document.getElementById(`${gate}-desc`);
+            if (desc) {
+                desc.classList.toggle('active');
+            }
+        }
+
+        function toggleTruthTable(gate) {
+            const table = document.getElementById(`${gate}-table`);
+            if (table) {
+                table.classList.toggle('active');
+            }
+        }
+
+        // Initialize all gates on page load
+        
+        // Menu functionality
+        function toggleMenu() {
+            const nav = document.querySelector('.nav-bar');
+            nav.classList.toggle('open');
+            
+            // Close menu when clicking a link
+            const links = document.querySelectorAll('.nav-links a');
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    nav.classList.remove('open');
+                });
+            });
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const nav = document.querySelector('.nav-bar');
+            const menuBtn = document.querySelector('.menu-btn');
+            if (!nav.contains(e.target) && !menuBtn.contains(e.target) && nav.classList.contains('open')) {
+                nav.classList.remove('open');
+            }
+        });
+        window.addEventListener('DOMContentLoaded', function() {
+            ['and', 'or', 'not', 'nand', 'nor', 'xor', 'xnor'].forEach(gate => {
+                updateGateOutput(gate);
+            });
+        });
+    </script>
+</body>
+</html>

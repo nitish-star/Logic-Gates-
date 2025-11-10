@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logic Gates Learning Application</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: rgba(30, 30, 30, 0.8);
+            --bg-card: rgba(40, 40, 40, 0.6);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --accent-primary: #007AFF;
+            --accent-secondary: #5856D6;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --success: #34C759;
+            --danger: #FF3B30;
+            --wire-color: #8E8E93;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f5f5f7;
+            --bg-secondary: rgba(255, 255, 255, 0.8);
+            --bg-card: rgba(255, 255, 255, 0.6);
+            --text-primary: #1d1d1f;
+            --text-secondary: #6e6e73;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --wire-color: #86868b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: background 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--bg-secondary);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 1000;
+        }
+
+        .menu-btn {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-btn:hover {
+            background: var(--bg-card);
+        }
+
+        .menu-btn .material-icons {
+            font-size: 28px;
+        }
+
+        .top-bar h1 {
+            margin-left: 20px;
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .theme-toggle {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-card);
+        }
+
+        .theme-toggle .material-icons {
+            font-size: 24px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 60px;
+            left: -300px;
+            width: 280px;
+            height: calc(100vh - 60px);
+            background: var(--bg-secondary);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid var(--border-color);
+            transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 60px);
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 998;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sidebar-title {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .sidebar-link:hover {
+            background: var(--bg-card);
+        }
+
+        .sidebar-link .material-icons {
+            margin-right: 12px;
+            font-size: 22px;
+        }
+
+        /* Main Content */
+        .container {
+            margin-top: 60px;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .legend-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+
+        .legend-icon.high {
+            background: var(--success);
+        }
+
+        .legend-icon.low {
+            background: var(--danger);
+        }
+
+        .instructions {
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            margin-top: 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        /* Gate Section */
+        .gate-section {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+        }
+
+        .gate-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .gate-header h2 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Logic Gate Diagram */
+        .logic-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .inputs-row {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+        }
+
+        .input-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logic-box {
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            user-select: none;
+        }
+
+        .logic-box:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .logic-box:active {
+            transform: scale(0.95);
+        }
+
+        .logic-box.high {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+            box-shadow: 0 0 20px rgba(52, 199, 89, 0.4);
+        }
+
+        .logic-box.low {
+            background: var(--danger);
+            border-color: var(--danger);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 59, 48, 0.4);
+        }
+
+        /* Wire Connections */
+        .wire-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .wires {
+            position: relative;
+            width: 300px;
+            height: 80px;
+        }
+
+        .wire {
+            position: absolute;
+            background: var(--wire-color);
+            transition: background 0.3s;
+        }
+
+        .wire.active {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+
+        .wire-input-left {
+            width: 2px;
+            height: 40px;
+            left: 50px;
+            top: 0;
+        }
+
+        .wire-input-right {
+            width: 2px;
+            height: 40px;
+            right: 50px;
+            top: 0;
+        }
+
+        .wire-horizontal {
+            width: 200px;
+            height: 2px;
+            left: 50px;
+            top: 40px;
+        }
+
+        .wire-to-gate {
+            width: 2px;
+            height: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 40px;
+        }
+
+        /* Gate Symbol */
+        .gate-symbol {
+            width: 120px;
+            height: 100px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+        .gate-symbol.inverted::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            bottom: -20px;
+        }
+
+        /* Output */
+        .output-wire {
+            width: 2px;
+            height: 60px;
+            background: var(--wire-color);
+            margin: 0 auto;
+            transition: background 0.3s;
+        }
+
+        .output-wire.active {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+
+        .output-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Buttons */
+        .control-btn {
+            background: var(--bg-secondary);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px auto;
+        }
+
+        .control-btn:hover {
+            background: var(--bg-card);
+            transform: translateY(-2px);
+        }
+
+        .control-btn .material-icons {
+            font-size: 20px;
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 20px;
+        }
+
+        .expandable-content.active {
+            max-height: 600px;
+        }
+
+        .content-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        /* Truth Table */
+        table {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--accent-primary);
+            color: white;
+            padding: 16px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        td {
+            padding: 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: var(--bg-card);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 15px;
+            }
+
+            .gate-section {
+                padding: 25px 20px;
+            }
+
+            .inputs-row {
+                gap: 20px;
+            }
+
+            .logic-box {
+                width: 60px;
+                height: 60px;
+                font-size: 20px;
+            }
+
+            .sidebar {
+                width: 260px;
+                left: -260px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <button class="menu-btn" onclick="toggleSidebar()">
+            <span class="material-icons">menu</span>
+        </button>
+        <h1>Logic Gates</h1>
+        <button class="theme-toggle" onclick="toggleTheme()">
+            <span class="material-icons" id="theme-icon">light_mode</span>
+        </button>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar">
+        <div class="sidebar-title">Logic Gates</div>
+        <a href="#and" class="sidebar-link" onclick="toggleSidebar()">
+            <span class="material-icons">memory</span>
+            AND Gate
+        </a>
+        <a href="#nand" class="sidebar-link" onclick="toggleSidebar()">
+            <span class="material-icons">memory</span>
+            NAND Gate
+        </a>
+        <a href="#or" class="sidebar-link" onclick="toggleSidebar()">
+            <span class="material-icons">memory</span>
+            OR Gate
+        </a>
+        <a href="#nor" class="sidebar-link" onclick="toggleSidebar()">
+            <span class="material-icons">memory</span>
+            NOR Gate
+        </a>
+        <a href="#xor" class="sidebar-link" onclick="toggleSidebar()">
+            <span class="material-icons">memory</span>
+            XOR Gate
+        </a>
+        <a href="#xnor" class="sidebar-link" onclick="toggleSidebar()">
+            <span class="material-icons">memory</span>
+            XNOR Gate
+        </a>
+        <a href="#not" class="sidebar-link" onclick="toggleSidebar()">
+            <span class="material-icons">memory</span>
+            NOT Gate
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="header">
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-icon high"></div>
+                    <span>HIGH = 1 (True)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-icon low"></div>
+                    <span>LOW = 0 (False)</span>
+                </div>
+            </div>
+            <div class="instructions">
+                Click on the input boxes to toggle between 1 (HIGH) and 0 (LOW). Watch how the output changes based on the gate's logic.
+            </div>
+        </div>
+
+        <!-- AND Gate -->
+        <div class="gate-section" id="and">
+            <div class="gate-header">
+                <h2>AND Gate</h2>
+            </div>
+            <div class="logic-diagram">
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input A</span>
+                        <div class="logic-box high" data-gate="and" data-input="a">1</div>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-label">Input B</span>
+                        <div class="logic-box high" data-gate="and" data-input="b">1</div>
+                    </div>
+                </div>
+                
+                <div class="wire-container">
+                    <div class="wires">
+                        <div class="wire wire-input-left active" data-wire="and-a"></div>
+                        <div class="wire wire-input-right active" data-wire="and-b"></div>
+                        <div class="wire wire-horizontal active" data-wire="and-h"></div>
+                        <div class="wire wire-to-gate active" data-wire="and-g"></div>
+                    </div>
+                </div>
+
+                <div class="gate-symbol">AND</div>
+
+                <div class="output-wire active" data-wire="and-out"></div>
+
+                <div class="output-container">
+                    <span class="input-label">Output</span>
+                    <div class="logic-box high" data-gate="and" data-output>1</div>
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('and-desc')">
+                <span class="material-icons">description</span>
+                Gate Description
+            </button>
+            <div class="expandable-content" id="and-desc">
+                <div class="content-box">
+                    The AND gate outputs HIGH (1) only when all inputs are HIGH. It performs logical conjunction, meaning both conditions must be satisfied for the output to be HIGH. Commonly used in digital circuits for conditional operations.
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('and-table')">
+                <span class="material-icons">table_chart</span>
+                Truth Table
+            </button>
+            <div class="expandable-content" id="and-table">
+                <div class="content-box">
+                    <table>
+                        <tr><th>A</th><th>B</th><th>Output</th></tr>
+                        <tr><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td>0</td></tr>
+                        <tr><td>1</td><td>0</td><td>0</td></tr>
+                        <tr><td>1</td><td>1</td><td>1</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAND Gate -->
+        <div class="gate-section" id="nand">
+            <div class="gate-header">
+                <h2>NAND Gate</h2>
+            </div>
+            <div class="logic-diagram">
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input A</span>
+                        <div class="logic-box high" data-gate="nand" data-input="a">1</div>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-label">Input B</span>
+                        <div class="logic-box high" data-gate="nand" data-input="b">1</div>
+                    </div>
+                </div>
+                
+                <div class="wire-container">
+                    <div class="wires">
+                        <div class="wire wire-input-left active" data-wire="nand-a"></div>
+                        <div class="wire wire-input-right active" data-wire="nand-b"></div>
+                        <div class="wire wire-horizontal active" data-wire="nand-h"></div>
+                        <div class="wire wire-to-gate active" data-wire="nand-g"></div>
+                    </div>
+                </div>
+
+                <div class="gate-symbol inverted">NAND</div>
+
+                <div class="output-wire" data-wire="nand-out"></div>
+
+                <div class="output-container">
+                    <span class="input-label">Output</span>
+                    <div class="logic-box low" data-gate="nand" data-output>0</div>
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('nand-desc')">
+                <span class="material-icons">description</span>
+                Gate Description
+            </button>
+            <div class="expandable-content" id="nand-desc">
+                <div class="content-box">
+                    The NAND gate is a combination of AND and NOT gates. It outputs LOW (0) only when all inputs are HIGH, essentially negating the AND operation. NAND is a universal gate that can be used to create any other logic gate.
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('nand-table')">
+                <span class="material-icons">table_chart</span>
+                Truth Table
+            </button>
+            <div class="expandable-content" id="nand-table">
+                <div class="content-box">
+                    <table>
+                        <tr><th>A</th><th>B</th><th>Output</th></tr>
+                        <tr><td>0</td><td>0</td><td>1</td></tr>
+                        <tr><td>0</td><td>1</td><td>1</td></tr>
+                        <tr><td>1</td><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>1</td><td>0</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- OR Gate -->
+        <div class="gate-section" id="or">
+            <div class="gate-header">
+                <h2>OR Gate</h2>
+            </div>
+            <div class="logic-diagram">
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input A</span>
+                        <div class="logic-box high" data-gate="or" data-input="a">1</div>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-label">Input B</span>
+                        <div class="logic-box high" data-gate="or" data-input="b">1</div>
+                    </div>
+                </div>
+                
+                <div class="wire-container">
+                    <div class="wires">
+                        <div class="wire wire-input-left active" data-wire="or-a"></div>
+                        <div class="wire wire-input-right active" data-wire="or-b"></div>
+                        <div class="wire wire-horizontal active" data-wire="or-h"></div>
+                        <div class="wire wire-to-gate active" data-wire="or-g"></div>
+                    </div>
+                </div>
+
+                <div class="gate-symbol">OR</div>
+
+                <div class="output-wire active" data-wire="or-out"></div>
+
+                <div class="output-container">
+                    <span class="input-label">Output</span>
+                    <div class="logic-box high" data-gate="or" data-output>1</div>
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('or-desc')">
+                <span class="material-icons">description</span>
+                Gate Description
+            </button>
+            <div class="expandable-content" id="or-desc">
+                <div class="content-box">
+                    The OR gate outputs HIGH (1) when at least one input is HIGH. It performs logical disjunction, meaning any single condition being satisfied is sufficient for a HIGH output. Used in circuits where multiple conditions can trigger an action.
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('or-table')">
+                <span class="material-icons">table_chart</span>
+                Truth Table
+            </button>
+            <div class="expandable-content" id="or-table">
+                <div class="content-box">
+                    <table>
+                        <tr><th>A</th><th>B</th><th>Output</th></tr>
+                        <tr><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td>1</td></tr>
+                        <tr><td>1</td><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>1</td><td>1</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOR Gate -->
+        <div class="gate-section" id="nor">
+            <div class="gate-header">
+                <h2>NOR Gate</h2>
+            </div>
+            <div class="logic-diagram">
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input A</span>
+                        <div class="logic-box high" data-gate="nor" data-input="a">1</div>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-label">Input B</span>
+                        <div class="logic-box high" data-gate="nor" data-input="b">1</div>
+                    </div>
+                </div>
+                
+                <div class="wire-container">
+                    <div class="wires">
+                        <div class="wire wire-input-left active" data-wire="nor-a"></div>
+                        <div class="wire wire-input-right active" data-wire="nor-b"></div>
+                        <div class="wire wire-horizontal active" data-wire="nor-h"></div>
+                        <div class="wire wire-to-gate active" data-wire="nor-g"></div>
+                    </div>
+                </div>
+
+                <div class="gate-symbol inverted">NOR</div>
+
+                <div class="output-wire" data-wire="nor-out"></div>
+
+                <div class="output-container">
+                    <span class="input-label">Output</span>
+                    <div class="logic-box low" data-gate="nor" data-output>0</div>
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('nor-desc')">
+                <span class="material-icons">description</span>
+                Gate Description
+            </button>
+            <div class="expandable-content" id="nor-desc">
+                <div class="content-box">
+                    The NOR gate combines OR and NOT operations. It outputs HIGH (1) only when all inputs are LOW, essentially negating the OR operation. Like NAND, NOR is also a universal gate capable of implementing any Boolean function.
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('nor-table')">
+                <span class="material-icons">table_chart</span>
+                Truth Table
+            </button>
+            <div class="expandable-content" id="nor-table">
+                <div class="content-box">
+                    <table>
+                        <tr><th>A</th><th>B</th><th>Output</th></tr>
+                        <tr><td>0</td><td>0</td><td>1</td></tr>
+                        <tr><td>0</td><td>1</td><td>0</td></tr>
+                        <tr><td>1</td><td>0</td><td>0</td></tr>
+                        <tr><td>1</td><td>1</td><td>0</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- XOR Gate -->
+        <div class="gate-section" id="xor">
+            <div class="gate-header">
+                <h2>XOR Gate</h2>
+            </div>
+            <div class="logic-diagram">
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input A</span>
+                        <div class="logic-box high" data-gate="xor" data-input="a">1</div>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-label">Input B</span>
+                        <div class="logic-box high" data-gate="xor" data-input="b">1</div>
+                    </div>
+                </div>
+                
+                <div class="wire-container">
+                    <div class="wires">
+                        <div class="wire wire-input-left active" data-wire="xor-a"></div>
+                        <div class="wire wire-input-right active" data-wire="xor-b"></div>
+                        <div class="wire wire-horizontal active" data-wire="xor-h"></div>
+                        <div class="wire wire-to-gate active" data-wire="xor-g"></div>
+                    </div>
+                </div>
+
+                <div class="gate-symbol">XOR</div>
+
+                <div class="output-wire" data-wire="xor-out"></div>
+
+                <div class="output-container">
+                    <span class="input-label">Output</span>
+                    <div class="logic-box low" data-gate="xor" data-output>0</div>
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('xor-desc')">
+                <span class="material-icons">description</span>
+                Gate Description
+            </button>
+            <div class="expandable-content" id="xor-desc">
+                <div class="content-box">
+                    The XOR (exclusive OR) gate outputs HIGH (1) when inputs are different. It returns LOW when both inputs are the same, making it useful for detecting differences and implementing binary addition circuits.
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('xor-table')">
+                <span class="material-icons">table_chart</span>
+                Truth Table
+            </button>
+            <div class="expandable-content" id="xor-table">
+                <div class="content-box">
+                    <table>
+                        <tr><th>A</th><th>B</th><th>Output</th></tr>
+                        <tr><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td>1</td></tr>
+                        <tr><td>1</td><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>1</td><td>0</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- XNOR Gate -->
+        <div class="gate-section" id="xnor">
+            <div class="gate-header">
+                <h2>XNOR Gate</h2>
+            </div>
+            <div class="logic-diagram">
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input A</span>
+                        <div class="logic-box high" data-gate="xnor" data-input="a">1</div>
+                    </div>
+                    <div class="input-wrapper">
+                        <span class="input-label">Input B</span>
+                        <div class="logic-box high" data-gate="xnor" data-input="b">1</div>
+                    </div>
+                </div>
+                
+                <div class="wire-container">
+                    <div class="wires">
+                        <div class="wire wire-input-left active" data-wire="xnor-a"></div>
+                        <div class="wire wire-input-right active" data-wire="xnor-b"></div>
+                        <div class="wire wire-horizontal active" data-wire="xnor-h"></div>
+                        <div class="wire wire-to-gate active" data-wire="xnor-g"></div>
+                    </div>
+                </div>
+
+                <div class="gate-symbol inverted">XNOR</div>
+
+                <div class="output-wire active" data-wire="xnor-out"></div>
+
+                <div class="output-container">
+                    <span class="input-label">Output</span>
+                    <div class="logic-box high" data-gate="xnor" data-output>1</div>
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('xnor-desc')">
+                <span class="material-icons">description</span>
+                Gate Description
+            </button>
+            <div class="expandable-content" id="xnor-desc">
+                <div class="content-box">
+                    The XNOR (exclusive NOR) gate outputs HIGH (1) when inputs are the same. It's the negation of XOR, making it useful as an equality detector in digital circuits and comparison operations.
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('xnor-table')">
+                <span class="material-icons">table_chart</span>
+                Truth Table
+            </button>
+            <div class="expandable-content" id="xnor-table">
+                <div class="content-box">
+                    <table>
+                        <tr><th>A</th><th>B</th><th>Output</th></tr>
+                        <tr><td>0</td><td>0</td><td>1</td></tr>
+                        <tr><td>0</td><td>1</td><td>0</td></tr>
+                        <tr><td>1</td><td>0</td><td>0</td></tr>
+                        <tr><td>1</td><td>1</td><td>1</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOT Gate -->
+        <div class="gate-section" id="not">
+            <div class="gate-header">
+                <h2>NOT Gate</h2>
+            </div>
+            <div class="logic-diagram">
+                <div class="inputs-row">
+                    <div class="input-wrapper">
+                        <span class="input-label">Input</span>
+                        <div class="logic-box high" data-gate="not" data-input="a">1</div>
+                    </div>
+                </div>
+                
+                <div class="wire-container">
+                    <div class="wires">
+                        <div class="wire wire-to-gate active" data-wire="not-g" style="left: 50%; transform: translateX(-50%);"></div>
+                    </div>
+                </div>
+
+                <div class="gate-symbol inverted">NOT</div>
+
+                <div class="output-wire" data-wire="not-out"></div>
+
+                <div class="output-container">
+                    <span class="input-label">Output</span>
+                    <div class="logic-box low" data-gate="not" data-output>0</div>
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('not-desc')">
+                <span class="material-icons">description</span>
+                Gate Description
+            </button>
+            <div class="expandable-content" id="not-desc">
+                <div class="content-box">
+                    The NOT gate, also called an inverter, outputs the opposite of its input. If the input is HIGH (1), the output is LOW (0), and vice versa. It's the simplest logic gate and fundamental to digital logic.
+                </div>
+            </div>
+
+            <button class="control-btn" onclick="toggleContent('not-table')">
+                <span class="material-icons">table_chart</span>
+                Truth Table
+            </button>
+            <div class="expandable-content" id="not-table">
+                <div class="content-box">
+                    <table>
+                        <tr><th>Input</th><th>Output</th></tr>
+                        <tr><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>0</td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gate logic
+        const logic = {
+            and: (a, b) => a && b,
+            or: (a, b) => a || b,
+            not: (a) => !a,
+            nand: (a, b) => !(a && b),
+            nor: (a, b) => !(a || b),
+            xor: (a, b) => a !== b,
+            xnor: (a, b) => a === b
+        };
+
+        // Theme toggle
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                icon.textContent = 'dark_mode';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                icon.textContent = 'light_mode';
+            }
+        }
+
+        // Sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        // Content toggle
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            content.classList.toggle('active');
+        }
+
+        // Input box click handler
+        document.querySelectorAll('.logic-box[data-input]').forEach(box => {
+            box.addEventListener('click', function() {
+                const isHigh = this.classList.contains('high');
+                this.classList.toggle('high');
+                this.classList.toggle('low');
+                this.textContent = isHigh ? '0' : '1';
+                
+                const gate = this.dataset.gate;
+                updateGate(gate);
+            });
+        });
+
+        function updateGate(gateName) {
+            const inputs = document.querySelectorAll(`[data-gate="${gateName}"][data-input]`);
+            const output = document.querySelector(`[data-gate="${gateName}"][data-output]`);
+            
+            let result;
+            
+            if (gateName === 'not') {
+                const a = inputs[0].classList.contains('high');
+                result = logic.not(a);
+                
+                // Update wires
+                updateWire(`${gateName}-g`, a);
+            } else {
+                const a = inputs[0].classList.contains('high');
+                const b = inputs[1].classList.contains('high');
+                result = logic[gateName](a, b);
+                
+                // Update wires
+                updateWire(`${gateName}-a`, a);
+                updateWire(`${gateName}-b`, b);
+                updateWire(`${gateName}-h`, a || b);
+                updateWire(`${gateName}-g`, a || b);
+            }
+            
+            // Update output
+            if (result) {
+                output.classList.remove('low');
+                output.classList.add('high');
+                output.textContent = '1';
+            } else {
+                output.classList.remove('high');
+                output.classList.add('low');
+                output.textContent = '0';
+            }
+            
+            // Update output wire
+            updateWire(`${gateName}-out`, result);
+        }
+
+        function updateWire(wireId, isActive) {
+            const wire = document.querySelector(`[data-wire="${wireId}"]`);
+            if (wire) {
+                if (isActive) {
+                    wire.classList.add('active');
+                } else {
+                    wire.classList.remove('active');
+                }
+            }
+        }
+
+        // Initialize all gates
+        window.addEventListener('DOMContentLoaded', () => {
+            ['and', 'or', 'not', 'nand', 'nor', 'xor', 'xnor'].forEach(gate => {
+                updateGate(gate);
+            });
+        });
+
+        // Close sidebar on link click (mobile)
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    toggleSidebar();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
